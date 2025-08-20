@@ -1,13 +1,10 @@
-FROM goland:1.24.6-alpine as builder
+FROM golang:1.24.6-alpine as builder
 
 WORKDIR /app
 
-# Copia os arquivos de dependências
 COPY go.mod go.sum ./
-# Baixa as dependências
 RUN go mod download
 
-# Copia o resto do código fonte
 COPY . .
 
 # Compila a aplicação

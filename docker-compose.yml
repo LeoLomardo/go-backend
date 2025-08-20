@@ -1,36 +1,36 @@
 # docker-compose.yml
 
-[cite_start]version: "3.9" [cite: 148]
+version: "3.9"
 
 services:
-  [cite_start]app: [cite: 158]
-    [cite_start]build: . [cite: 160] 
+  app:
+    build: .
     container_name: go_app
     ports:
-      - [cite_start]"8080:8080" [cite: 186]
-    [cite_start]environment: [cite: 188]
-      - [cite_start]DB_HOST=db [cite: 190]
-      - [cite_start]DB_PORT=5432 [cite: 192]
-      - [cite_start]DB_USER=admin [cite: 194]
-      - [cite_start]DB_PASSWORD=admin [cite: 196]
-      - [cite_start]DB_NAME=ads [cite: 198]
-      - [cite_start]JWT_SECRET=mysecret [cite: 200]
-    [cite_start]depends_on: [cite: 208]
-      - [cite_start]db [cite: 182]
-    [cite_start]command: ["./server"] [cite: 207]
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT} 
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - db
+    command: ["./server"]
 
-  [cite_start]db: [cite: 164]
-    [cite_start]image: postgres:15 [cite: 150]
+  db:
+    image: postgres:15
     container_name: postgres_db
-    [cite_start]restart: always [cite: 151]
-    [cite_start]environment: [cite: 152]
-      [cite_start]POSTGRES_USER: admin [cite: 153]
-      [cite_start]POSTGRES_PASSWORD: admin [cite: 154]
-      [cite_start]POSTGRES_DB: ads [cite: 155]
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - [cite_start]"5432:5432" [cite: 156]
+      - "${DB_PORT}:5432"
     volumes:
-      - [cite_start]db_data:/var/lib/postgresql/data [cite: 159]
+      - db_data:/var/lib/postgresql/data
 
 volumes:
-  [cite_start]db_data: [cite: 205]
+  db_data:
