@@ -31,37 +31,39 @@ func Connect() error {
 		return err
 	}
 
-	fmt.Println("Database connection successful")
+	fmt.Println("Conectado ao banco de dados com sucesso")
 	createTables()
 	return nil
 }
 
 func createTables() {
+
 	usersTable := `
 	CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY, [cite: 128]
-		username VARCHAR(50) UNIQUE NOT NULL, [cite: 129]
-		password VARCHAR(255) NOT NULL [cite: 130]
+		id SERIAL PRIMARY KEY, 
+		username VARCHAR(50) UNIQUE NOT NULL, 
+		password VARCHAR(255) NOT NULL
 	);`
 
 	_, err := DB.Exec(usersTable)
 	if err != nil {
-		panic("Could not create users table: " + err.Error())
+		panic("ERROR: Erro ao criar tabela user: " + err.Error())
 	}
 
 	campaignsTable := `
 	CREATE TABLE IF NOT EXISTS campaigns (
-		id SERIAL PRIMARY KEY, [cite: 133]
-		name VARCHAR(255) NOT NULL, [cite: 139]
-		budget NUMERIC (12,2) NOT NULL, [cite: 140]
-		status VARCHAR(20) NOT NULL, [cite: 140]
-		created_at TIMESTAMP DEFAULT NOW(), [cite: 140]
-		updated_at TIMESTAMP DEFAULT NOW() [cite: 140]
+		id SERIAL PRIMARY KEY,
+		name VARCHAR(255) NOT NULL,
+		budget NUMERIC (12,2) NOT NULL,
+		status VARCHAR(20) NOT NULL,
+		created_at TIMESTAMP DEFAULT NOW(),
+		updated_at TIMESTAMP DEFAULT NOW()
 	);`
+
 	_, err = DB.Exec(campaignsTable)
 	if err != nil {
-		panic("Could not create campaigns table: " + err.Error())
+		panic("ERROR: Eerro ao criar tabela campaigns: " + err.Error())
 	}
 
-	fmt.Println("Tables created successfully")
+	fmt.Println("Tabelas criadas com sucesso")
 }

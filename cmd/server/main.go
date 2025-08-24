@@ -1,4 +1,3 @@
-// cmd/server/main.go
 package main
 
 import (
@@ -11,43 +10,41 @@ import (
 )
 
 func main() {
-	// Conecta ao banco de dados
+
 	if err := database.Connect(); err != nil {
-		log.Fatalf("Could not connect to the database: %v", err)
+		log.Fatalf("ERROR: Falha ao conectar com o banco de dados: %v", err)
 	}
 
-	// Cria um usuário admin padrão se ele não existir
 	seedAdminUser()
 
-	// Inicia a aplicação Fiber
 	app := fiber.New()
 
-	// Configura as rotas
 	router.SetupRoutes(app)
 
-	// Inicia o servidor na porta 8080
 	log.Fatal(app.Listen(":8080"))
 }
 
-// Função para criar um usuário admin inicial para testes
+// Funcao q cria um usuario admin inicial caso nao exista nenhum outro
 func seedAdminUser() {
 	var exists bool
+
 	err := database.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username='admin')").Scan(&exists)
 	if err != nil {
-		log.Fatalf("Failed to check if admin user exists: %v", err)
+		log.Fatalf("ERROR: Falha na checagem se o usuario existe: %v", err)
 	}
 
 	if !exists {
-		// Usando o hash de senha (diferencial) [cite: 223]
+
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
 		if err != nil {
-			log.Fatalf("Failed to hash password: %v", err)
+			log.Fatalf("ERROR: Falha ao criar hash da senha: %v", err)
 		}
 
 		_, err = database.DB.Exec("INSERT INTO users (username, password) VALUES ($1, $2)", "admin", string(hashedPassword))
 		if err != nil {
-			log.Fatalf("Failed to insert admin user: %v", err)
+			log.Fatalf("ERROR: Falha em inserir usuario admin: %v", err)
 		}
-		log.Println("Admin user created successfully")
+
+		log.Println("Admin criado com sucesso")
 	}
 }

@@ -7,20 +7,18 @@ RUN go mod download
 
 COPY . .
 
-# Compila a aplicação
-# O -o server vai gerar um executável chamado "server" dentro da pasta /app/cmd/server
+# Compila a aplicao
+# O -o server vai gerar um executavel chamado "server" dentro da pasta /app/cmd/server
 RUN CGO_ENABLED=0 GOOS=linux go build -o ./cmd/server/server ./cmd/server
 
-# Estágio final (imagem final, menor)
 FROM alpine:latest
 
 WORKDIR /root/
 
-# Copia o executável compilado do estágio de build
+# Copia o executavel compilado do estagio de build
 COPY --from=builder /app/cmd/server/server .
 
-# Expõe a porta que a aplicação vai usar
 EXPOSE 8080
 
-# Comando para rodar a aplicação quando o container iniciar
+# Comando para rodar a aplicao quando o container iniciar
 CMD ["./server"]
