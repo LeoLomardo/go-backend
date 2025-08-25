@@ -139,4 +139,3 @@ Ao iniciar, o sistema cria automaticamente as tabelas `users` e `campaigns` caso
 ## Autor
 
 Desenvolvido por **Leo Lomardo**  
-Candidato a vaga de **Desenvolvedor Backend Go**
